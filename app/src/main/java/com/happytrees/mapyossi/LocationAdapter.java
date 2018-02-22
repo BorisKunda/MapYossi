@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +63,7 @@ public class LocationAdapter  extends RecyclerView.Adapter<LocationAdapter.MyVie
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {//CHANGES FRAGMENTS WHEN ITEM IS CLICKED
+                   Toast.makeText(context,currentLocation.name,Toast.LENGTH_SHORT).show();
                     FragmentChanger fragmentChanger = (FragmentChanger)context;
                     fragmentChanger.changeFragments(currentLocation);
                 }

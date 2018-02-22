@@ -71,13 +71,13 @@ public class MyListFragment extends Fragment {
         });
 
 
-        //SET CLICK LATER
+
 
         //ARRAY LIST OF LOCATIONS TAKEN FROM DB CREATED BY SUGAR ORM
 
         //ADD THREE RANDOM LOCATIONS TO DATABASE
 
-        //THINK ABOUT METHOD THAT WILL CHECK IF THESE FILES ALREADY BEEN IN DATABASE
+
        /* Location loc1 = new Location("Christ the Redeemer",-22.951911,-43.2126759);
         loc1.save();
         Location loc2 = new Location("Coliseum", 41.8902142,12.4900422);
@@ -106,6 +106,3 @@ public class MyListFragment extends Fragment {
 }
 
 
-/*
-getFragmentManager().beginTransaction().replace(R.id.MainActLayout,myListFragment).commit();
- */

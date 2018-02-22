@@ -35,7 +35,7 @@ implementation 'com.android.support:cardview-v7:27.0.2'
 
 
 
-        //CREATE AND DISPLAY  WondersListFragment in containerLayout in MainActivity
+        //CREATE AND DISPLAY myListFragment in containerLayout in MainActivity
         MyListFragment myListFragment = new MyListFragment();
         myListFragment.setRetainInstance(true);//KEEPS FRAGMENT SAME AFTER ROTATION CHANGE (portrait <-> landscape) --> FIND MORE ELEGANT WAY
         getFragmentManager().beginTransaction().replace(R.id.MainActLayout,myListFragment).commit();
