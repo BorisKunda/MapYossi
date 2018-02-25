@@ -60,6 +60,7 @@ public class LocationAdapter  extends RecyclerView.Adapter<LocationAdapter.MyVie
             itemText.setText(currentLocation.name);
 
             //MAKE RECYCLER VIEW CLICKABLE
+            //normal click
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {//CHANGES FRAGMENTS WHEN ITEM IS CLICKED
@@ -68,7 +69,25 @@ public class LocationAdapter  extends RecyclerView.Adapter<LocationAdapter.MyVie
                     fragmentChanger.changeFragments(currentLocation);
                 }
             });
+            //long click -> removes item
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                //REMOVE ITEM FROM DATABASE THEN FROM RECYCLER VIEW
+                    //remove item from database
+                    Location location = Location.findById(Location.class,allLocations.get(getAdapterPosition()).getId());
+                    location.delete();
+                    //standard code for removing item from recycler view -> we remove item from list after we removed it from database
+                    allLocations.remove(getAdapterPosition());//we used  "getAdapterPosition()" to get item  position (int)
+                    notifyItemRemoved(getAdapterPosition());//we used  "getAdapterPosition()" to get item  position (int)
+                    notifyItemRangeChanged(getAdapterPosition(), allLocations.size());//we used  "getAdapterPosition()" to get item  position (int)
+
+                    Toast.makeText(context,"item removed",Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            });
         }
+
 
         }
 }
