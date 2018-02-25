@@ -5,18 +5,15 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,10 +23,10 @@ import java.util.List;
 public class MyListFragment extends Fragment {
 
 
-
     public MyListFragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,7 +75,7 @@ public class MyListFragment extends Fragment {
         //ADD THREE RANDOM LOCATIONS TO DATABASE
 
 
-       /* Location loc1 = new Location("Christ the Redeemer",-22.951911,-43.2126759);
+    /* Location loc1 = new Location("Christ the Redeemer",-22.951911,-43.2126759);
         loc1.save();
         Location loc2 = new Location("Coliseum", 41.8902142,12.4900422);
         loc2.save();
@@ -86,7 +83,10 @@ public class MyListFragment extends Fragment {
         loc3.save();*/
 
 
-        List<Location> allLocations = Location.listAll(Location.class);
+
+
+
+        final List<Location> allLocations = Location.listAll(Location.class);
 
         RecyclerView recyclerView = v.findViewById(R.id.locationRecyclerView);
 
@@ -94,9 +94,37 @@ public class MyListFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         //adapter
-        LocationAdapter locationAdapter = new LocationAdapter(allLocations, getActivity());
+        final LocationAdapter locationAdapter = new LocationAdapter(allLocations, getActivity());
 
         recyclerView.setAdapter(locationAdapter);
+
+
+
+        //INTERFACE ALLOWING LISTENING TO SWEEP ACTIONS
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {//REMOVE ON  LEFT/RIGHT SWIPE
+                //fetch item position
+                int position = viewHolder.getAdapterPosition();
+                //remove item from database
+             Location location = Location.findById(Location.class,allLocations.get(position).getId());
+             location.delete();
+             //remove from list
+                allLocations.remove(position);
+                locationAdapter.notifyItemRemoved(position);
+                locationAdapter.notifyItemRangeChanged(position,allLocations.size());//we used  "getAdapterPosition()" to get item  position (int)
+
+                Toast.makeText(getActivity(),"item removed",Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView); //set swipe to recylcerview
 
 
         return v;
